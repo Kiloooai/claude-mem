@@ -45,8 +45,11 @@ claude-mem init
 # After a coding session, log it
 claude-mem log /path/to/session.json
 
-# See what you did today
+# See what you did today (LLM-powered summary if OPENAI_API_KEY is set)
 claude-mem summary
+
+# Machine-readable output
+claude-mem summary --json
 
 # Find something from last week
 claude-mem search "rate limiting"
@@ -75,7 +78,7 @@ You can extend this with `subject`, `toolCalls`, etc. — the logger stores the 
 
 ## Roadmap ideas (later)
 
-- Auto-summarization via LLM for longer sessions
+- Auto-summarization via LLM for longer sessions ✓ (basic done)
 - Embedding-based semantic search (cosine similarity on message vectors)
 - OpenClaw integration: built-in hook that auto-logs every session
 - `claude-mem serve` — tiny local web UI to browse sessions

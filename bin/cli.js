@@ -13,7 +13,7 @@ const path = require('path');
 const { Store } = require('../index');
 
 const HOME = process.env.HOME || process.env.USERPROFILE;
-const STORE_DIR = path.join(HOME, '.claude-mem');
+const STORE_DIR = process.env.CLAUDE_MEM_DIR || path.join(HOME, '.claude-mem');
 
 function ensureStore() {
   if (!fs.existsSync(STORE_DIR)) {
@@ -61,9 +61,16 @@ Commands:
 
     case 'summary': {
       const date = args[0] || new Date().toISOString().slice(0, 10);
-      const summary = store.getDailySummary(date);
-      console.log(`\n📅 ${date} — Session Summary\n`);
-      console.log(summary || 'No sessions recorded for this date.\n');
+      const jsonFlag = args.includes('--json');
+      const { summarize } = require('../lib/summarizer');
+      const result = await summarize(date, STORE_DIR);
+      if (jsonFlag) {
+        console.log(JSON.stringify({ date, ...result }, null, 2));
+      } else {
+        console.log(`\n📅 ${date} — Session Summary (${result.method})\n`);
+        console.log(result.summary);
+        console.log();
+      }
       break;
     }
 
