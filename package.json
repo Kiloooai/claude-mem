@@ -1,7 +1,7 @@
 {
   "name": "claude-mem",
-  "version": "0.1.0",
-  "description": "Persistent AI coding session memory — logs tool calls and auto-injects relevant context",
+  "version": "0.1.1",
+  "description": "Persistent AI coding session memory — logs tool calls and auto-injects relevant context (OpenClaw/Claude Code)",
   "main": "index.js",
   "bin": {
     "claude-mem": "./bin/cli.js"
@@ -9,10 +9,35 @@
   "scripts": {
     "test": "node test/basic.js"
   },
-  "keywords": ["claude", "claude-code", "openclaw", "memory", "context", "ai"],
+  "keywords": ["claude", "claude-code", "openclaw", "memory", "context", "ai", "session", "logging"],
   "author": "Kiloooai",
   "license": "MIT",
   "engines": {
     "node": ">=18"
-  }
+  },
+  "files": [
+    "index.js",
+    "bin/",
+    "lib/",
+    "skills/",
+    "README.md",
+    "package.json"
+  ],
+  "openclaw": {
+    "skills": [
+      {
+        "name": "claude-mem",
+        "path": "./skills/claude-mem",
+        "hooks": ["session-new", "session-end"]
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kiloooai/claude-mem.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kiloooai/claude-mem/issues"
+  },
+  "homepage": "https://github.com/Kiloooai/claude-mem#readme"
 }

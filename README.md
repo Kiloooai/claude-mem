@@ -18,15 +18,18 @@ claude-mem inject <context>
 
 AI coding assistants are stateless between sessions. Over time you solve the same pattern twice, forget what you did last week, or waste time re-explaining constraints. This tool gives you cheap, local, persistent memory.
 
-## How
+## How it works
 
 - **Storage**: `~/.claude-mem/`
   - `sessions/YYYY-MM-DD.jsonl` — one session object per line, sharded by date
   - `index.json` — flat lookup (id → file + offset + metadata)
-- **Logging**: Call `claude-mem log <session.json>` at the end of a session (or have your tooling pipe output automatically)
+- **Logging**: Two modes:
+  - CLI: `claude-mem log <session.json>` at end of session
+  - OpenClaw skill: hooks `session-end` and auto-logs every session (no manual step)
 - **Search**: `claude-mem search <keyword>` — match across titles and user messages
-- **Summaries**: `claude-mem summary 2026-04-20` — prints a digest of that day's sessions
-- **Context injection helper**: `claude-mem inject "<current task>"` — prints suggested past sessions to copy/paste into a new AI chat
+- **Summaries**: `claude-mem summary [date]` — LLM-powered if `OPENAI_API_KEY` set; falls back to title list
+- **Context injection**: `claude-mem inject "<current task>"` — suggests relevant past sessions
+
 
 ## MVP features (done)
 
@@ -36,27 +39,33 @@ AI coding assistants are stateless between sessions. Over time you solve the sam
 - Relevance lookup for context injection suggestions
 - Simple file-based storage, no database
 
-## Usage
+## Install & setup
 
 ```bash
-# First-time setup
+# Install globally
+npm install -g claude-mem
+
+# Initialize storage
 claude-mem init
-
-# After a coding session, log it
-claude-mem log /path/to/session.json
-
-# See what you did today (LLM-powered summary if OPENAI_API_KEY is set)
-claude-mem summary
-
-# Machine-readable output
-claude-mem summary --json
-
-# Find something from last week
-claude-mem search "rate limiting"
-
-# Start a new task — get relevant past sessions
-claude-mem inject "Add auth middleware to API routes"
 ```
+
+### As an OpenClaw Skill (auto-logging)
+
+Install the skill to automatically log every session — no manual `claude-mem log` needed:
+
+```bash
+# Option 1: via ClawHub (when published to clawhub.ai)
+clawhub install claude-mem
+
+# Option 2: manual skill link (development)
+openclaw skill link /path/to/claude-mem/skills/claude-mem
+openclaw skill enable claude-mem
+openclaw restart
+```
+
+Once enabled, every session is automatically logged to `~/.claude-mem/`. Use `claude-mem summary`, `claude-mem search`, and `claude-mem inject` as usual.
+
+---
 
 ## Session JSON format
 
@@ -78,11 +87,12 @@ You can extend this with `subject`, `toolCalls`, etc. — the logger stores the 
 
 ## Roadmap ideas (later)
 
-- Auto-summarization via LLM for longer sessions ✓ (basic done)
 - Embedding-based semantic search (cosine similarity on message vectors)
-- OpenClaw integration: built-in hook that auto-logs every session
 - `claude-mem serve` — tiny local web UI to browse sessions
 - Export to markdown / Notion / Obsidian
+- [x] OpenClaw integration: built-in hook that auto-logs every session (v0.1.1)
+- [x] LLM-powered daily summaries with `--json` flag (v0.1.1)
+
 
 ## Development
 
