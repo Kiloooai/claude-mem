@@ -1,0 +1,18 @@
+{
+  "name": "claude-mem",
+  "version": "0.1.0",
+  "description": "Persistent AI coding session memory — logs tool calls and auto-injects relevant context",
+  "main": "index.js",
+  "bin": {
+    "claude-mem": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node test/basic.js"
+  },
+  "keywords": ["claude", "claude-code", "openclaw", "memory", "context", "ai"],
+  "author": "Kiloooai",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

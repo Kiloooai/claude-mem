@@ -1,0 +1,2 @@
+{"id":"sess-001","date":"2026-04-20","title":"Fix login validation","messages":[{"role":"user","content":"Fix the login form validation bug"},{"role":"assistant","content":" Reviewed auth.js, added required checks"}],"createdAt":1776672831146}
+{"id":"sess-002","date":"2026-04-20","title":"API rate limiting","messages":[{"role":"user","content":"Add rate limiting to the public API endpoints"},{"role":"assistant","content":" Implemented token bucket in middleware"}],"createdAt":1776672831146}

@@ -1,0 +1,16 @@
+{
+  "sess-001": {
+    "id": "sess-001",
+    "date": "2026-04-20",
+    "file": "2026-04-20.jsonl",
+    "offset": 0,
+    "title": "Fix login validation"
+  },
+  "sess-002": {
+    "id": "sess-002",
+    "date": "2026-04-20",
+    "file": "2026-04-20.jsonl",
+    "offset": 244,
+    "title": "API rate limiting"
+  }
+}
