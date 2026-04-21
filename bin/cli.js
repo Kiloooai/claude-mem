@@ -1,11 +1,6 @@
 #!/usr/bin/env node
 /**
  * claude-mem CLI
- * Usage:
- *   claude-mem init              # Initialize storage (~/.claude-mem)
- *   claude-mem log <session.json>  # Log a session transcript
- *   claude-mem summary [date]    # Print daily summary (default: today)
- *   claude-mem search <query>    # Search past sessions
  */
 
 const fs = require('fs');
@@ -32,6 +27,7 @@ Commands:
   init              Create ~/.claude-mem storage directory
   log <session.json>  Log a session transcript (from OpenClaw/Claude Code)
   summary [date]    Print daily summary (YYYY-MM-DD, default today)
+  export-week [days]  Export past N days to Markdown (default 7, optional --out=FILE)
   search <query>    Search past sessions by keyword
   inject <context>  Suggest context to inject (CLI helper)
 `);
@@ -71,6 +67,20 @@ Commands:
         console.log(result.summary);
         console.log();
       }
+      break;
+    }
+
+    case 'export-week': {
+      const days = parseInt(args[0]) || 7;
+      const outArg = args.find(a => a.startsWith('--out='));
+      const outFile = outArg ? outArg.slice(6) : `claude-mem-weekly-${new Date().toISOString().slice(0,10)}.md`;
+      const { exportWeek } = require('../lib/exporter');
+      const result = await exportWeek(days, STORE_DIR, outFile);
+      if (result.error) {
+        console.error('Error:', result.error);
+        process.exit(1);
+      }
+      console.log(`✓ Exported ${result.sessionCount} sessions → ${result.file}`);
       break;
     }
 
