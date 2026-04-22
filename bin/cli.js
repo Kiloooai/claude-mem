@@ -27,6 +27,7 @@ Commands:
   init              Create ~/.claude-mem storage directory
   log <session.json>  Log a session transcript (from OpenClaw/Claude Code)
   summary [date]    Print daily summary (YYYY-MM-DD, default today)
+  stats [--days=N]  Show daily session counts for last N days (default 7)
   export-week [days]  Export past N days to Markdown (default 7, optional --out=FILE)
   search <query>    Search past sessions by keyword
   inject <context>  Suggest context to inject (CLI helper)
@@ -81,6 +82,27 @@ Commands:
         process.exit(1);
       }
       console.log(`✓ Exported ${result.sessionCount} sessions → ${result.file}`);
+      break;
+    }
+
+    case 'stats': {
+      const daysArg = args.find(a => a.startsWith('--days='));
+      const days = daysArg ? parseInt(daysArg.slice(7)) : 7;
+      const counts = store.getDailyCounts(days);
+      if (counts.length === 0) {
+        console.log('No session data available.');
+        break;
+      }
+      console.log(`\n📊 Session counts (last ${days} days)\n`);
+      console.log('─────────────┬───────');
+      console.log('Date         │ Count');
+      console.log('─────────────┼───────');
+      counts.forEach(c => {
+        console.log(`${c.date} │ ${String(c.count).padStart(5)}`);
+      });
+      console.log('─────────────┴───────');
+      const total = counts.reduce((sum, c) => sum + c.count, 0);
+      console.log(`Total sessions: ${total}\n`);
       break;
     }
 

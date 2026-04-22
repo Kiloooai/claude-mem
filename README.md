@@ -6,6 +6,8 @@ Persistent AI coding session memory — logs tool calls and auto-injects relevan
 claude-mem init
 claude-mem log session.json
 claude-mem summary [date]
+claude-mem stats [--days=N]
+claude-mem export-week [days] [--out=FILE]
 claude-mem search <query>
 claude-mem inject <context>
 ```
@@ -28,6 +30,8 @@ AI coding assistants are stateless between sessions. Over time you solve the sam
   - OpenClaw skill: hooks `session-end` and auto-logs every session (no manual step)
 - **Search**: `claude-mem search <keyword>` — match across titles and user messages
 - **Summaries**: `claude-mem summary [date]` — LLM-powered if `OPENAI_API_KEY` set; falls back to title list
+- **Stats**: `claude-mem stats [--days=N]` — daily session count table (default 7 days)
+- **Weekly export**: `claude-mem export-week [days] [--out=FILE]` — markdown digest with optional LLM summary
 - **Context injection**: `claude-mem inject "<current task>"` — suggests relevant past sessions
 
 
@@ -38,6 +42,7 @@ AI coding assistants are stateless between sessions. Over time you solve the sam
 - Full-text keyword search (titles + user messages)
 - Relevance lookup for context injection suggestions
 - Simple file-based storage, no database
+- Daily session count statistics (`stats` command)
 
 ## Install & setup
 
@@ -90,6 +95,8 @@ You can extend this with `subject`, `toolCalls`, etc. — the logger stores the 
 - Embedding-based semantic search (cosine similarity on message vectors)
 - `claude-mem serve` — tiny local web UI to browse sessions
 - Export to markdown / Notion / Obsidian
+- [x] Daily session count statistics (`stats` command) (v0.1.4)
+- [x] Weekly digest export (`export-week` with LLM summary) (v0.1.3)
 - [x] OpenClaw integration: built-in hook that auto-logs every session (v0.1.1)
 - [x] LLM-powered daily summaries with `--json` flag (v0.1.1)
 
